@@ -51,7 +51,7 @@ class Play extends Phaser.Scene {
 
         // initialize score
         this.p1Score = 0;
-        localStorage.setItem('highscore', 0)
+        this.highScore = 0;
 
         //set up timer
         this.timeLeft = game.settings.gameTimer;
@@ -67,7 +67,7 @@ class Play extends Phaser.Scene {
                 top: 5,
                 bottom: 5,
             },
-            fixedWidth: 200
+            fixedWidth: 160
         }
         this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, 'Score:' + this.p1Score, scoreConfig);
 
@@ -82,9 +82,10 @@ class Play extends Phaser.Scene {
                 top: 5,
                 bottom: 5,
             },
-            fixedWidth: 270
+            fixedWidth: 240
         }
-        this.highScoreLeft = this.add.text(220, 53, 'High Score:' + localStorage.getItem("highscore"), highScoreConfig);
+        this.highScoreLeft = this.add.text(220, 53, 'High Score:' + localStorage.getItem('highscore'), highScoreConfig);
+
 
         // GAME OVER flag
         this.gameOver = false;
@@ -95,6 +96,13 @@ class Play extends Phaser.Scene {
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
             this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← to Menu', scoreConfig).setOrigin(0.5);
             this.gameOver = true;
+        }, null, this);
+
+        //speed up
+        this.clock = this.time.delayedCall(10000, () => {
+            this.ship01.moveSpeed *= 1.5;
+            this.ship02.moveSpeed *= 1.5;
+            this.ship03.moveSpeed *= 1.5;
         }, null, this);
     }
 
@@ -177,8 +185,10 @@ class Play extends Phaser.Scene {
         // score add and repaint
         this.p1Score += ship.points;
         this.scoreLeft.text = 'Score:' +this.p1Score; 
-        if (localStorage.getItem('highscore') < this.p1Score){
-            localStorage.setItem('highscore', this.p1Score);
+        if (this.p1Score > localStorage.getItem("highscore")) 
+        { 
+            localStorage.setItem("highscore", this.p1Score);
+            this.highScoreLeft.text = 'High Score:' + localStorage.getItem('highscore');
         }
         
         this.sound.play('sfx_explosion');
