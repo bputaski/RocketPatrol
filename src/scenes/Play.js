@@ -17,8 +17,8 @@ class Play extends Phaser.Scene {
     create() {
         // place tile sprite
         this.starfield1 = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0);
-        this.starfield2 = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0);
-        this.starfield3 = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0);
+        this.starfield2 = this.add.tileSprite(0, 0, 640, 480, 'starfield2').setOrigin(0, 0);
+        this.starfield3 = this.add.tileSprite(0, 0, 640, 480, 'starfield3').setOrigin(0, 0);
 
         // green UI background
         this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0x00FF00).setOrigin(0, 0);
@@ -51,6 +51,10 @@ class Play extends Phaser.Scene {
 
         // initialize score
         this.p1Score = 0;
+        localStorage.setItem('highscore', 0)
+
+        //set up timer
+        this.timeLeft = game.settings.gameTimer;
 
         // display score
         let scoreConfig = {
@@ -58,14 +62,29 @@ class Play extends Phaser.Scene {
             fontSize: '28px',
             backgroundColor: '#F3B141',
             color: '#843605',
-            align: 'right',
+            align: 'left',
             padding: {
                 top: 5,
                 bottom: 5,
             },
-            fixedWidth: 100
+            fixedWidth: 200
         }
-        this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.p1Score, scoreConfig);
+        this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, 'Score:' + this.p1Score, scoreConfig);
+
+        // display high score
+        let highScoreConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            backgroundColor: '#F3B141',
+            color: '#843605',
+            align: 'left',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 270
+        }
+        this.highScoreLeft = this.add.text(220, 53, 'High Score:' + localStorage.getItem("highscore"), highScoreConfig);
 
         // GAME OVER flag
         this.gameOver = false;
@@ -79,8 +98,9 @@ class Play extends Phaser.Scene {
         }, null, this);
     }
 
-    update() {
+    update(time, delta) {
         // check key input for restart / menu
+
         if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
             this.scene.restart();
         }
@@ -89,15 +109,31 @@ class Play extends Phaser.Scene {
             this.scene.start("menuScene");
         }
 
-        this.starfield1.tilePositionX -= 1;  // update tile sprite
+        this.starfield1.tilePositionX -= 1.5;  // update tile sprite
         this.starfield2.tilePositionX -= 2;
-        this.starfield3.tilePositionX -= 3;
+        this.starfield3.tilePositionX -= 2.5;
 
         if(!this.gameOver) {
             this.p1Rocket.update();             // update p1
-             this.ship01.update();               // update spaceship (x3)
+            this.ship01.update();               // update spaceship (x3)
             this.ship02.update();
             this.ship03.update();
+
+            this.timeLeft -= delta;
+            let timeConfig = {
+                fontFamily: 'Courier',
+                fontSize: '28px',
+                backgroundColor: '#F3B141',
+                color: '#843605',
+                align: 'left',
+                padding: {
+                    top: 5,
+                    bottom: 5,
+                },
+                fixedWidth: 120
+            }
+            this.timeDisplay = this.add.text(480, 53, 'Time:' + Math.round(this.timeLeft/1000), timeConfig);
+
         }
 
         // check collisions
@@ -113,7 +149,7 @@ class Play extends Phaser.Scene {
             this.p1Rocket.reset();
             this.shipExplode(this.ship01);
         }
-    }
+    }  
 
     checkCollision(rocket, ship) {
         // simple AABB checking
@@ -140,8 +176,12 @@ class Play extends Phaser.Scene {
         });
         // score add and repaint
         this.p1Score += ship.points;
-        this.scoreLeft.text = this.p1Score; 
+        this.scoreLeft.text = 'Score:' +this.p1Score; 
+        if (localStorage.getItem('highscore') < this.p1Score){
+            localStorage.setItem('highscore', this.p1Score);
+        }
         
         this.sound.play('sfx_explosion');
       }
+
 }
