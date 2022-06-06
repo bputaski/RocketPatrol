@@ -8,9 +8,18 @@ class Menu extends Phaser.Scene {
         this.load.audio('sfx_select', './assets/blip_select12.wav');
         this.load.audio('sfx_explosion', './assets/explosion38.wav');
         this.load.audio('sfx_rocket', './assets/rocket_shot.wav');
+        this.load.image('starfield', './assets/starfield.png');
+        this.load.image('starfield2', './assets/starfield2.png');
+        this.load.image('starfield3', './assets/starfield3.png');
+        this.load.image('menu', './assets/menu screen.png');
     }
 
     create() {
+      this.starfield1 = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0);
+      this.starfield2 = this.add.tileSprite(0, 0, 640, 480, 'starfield2').setOrigin(0, 0);
+      this.starfield3 = this.add.tileSprite(0, 0, 640, 480, 'starfield3').setOrigin(0, 0);
+      this.menu = this.add.tileSprite(0, 0, 640, 480, 'menu').setOrigin(0, 0)
+
         // menu text configuration
         let menuConfig = {
             fontFamily: 'Courier',
@@ -38,10 +47,14 @@ class Menu extends Phaser.Scene {
     }
 
     update() {
+      this.starfield1.tilePositionX -= 1.5;  // update tile sprite
+      this.starfield2.tilePositionX -= 2;
+      this.starfield3.tilePositionX -= 2.5;
+
         if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
           // Novice mode
           game.settings = {
-            spaceshipSpeed: 4,
+            spaceshipSpeed: 3.5,
             gameTimer: 60000    
           }
           this.sound.play('sfx_select');
@@ -50,8 +63,8 @@ class Menu extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
           // Expert mode
           game.settings = {
-            spaceshipSpeed: 6,
-            gameTimer: 45000    
+            spaceshipSpeed: 4.5,
+            gameTimer: 15000    
           }
           this.sound.play('sfx_select');
           this.scene.start("playScene");    

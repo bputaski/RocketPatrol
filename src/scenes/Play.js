@@ -122,8 +122,20 @@ class Play extends Phaser.Scene {
 
         
         if(this.timeLeft <= 0){
-            this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
-            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← to Menu', scoreConfig).setOrigin(0.5);
+            let endConfig = {
+                fontFamily: 'Courier',
+                fontSize: '28px',
+                backgroundColor: '#F3B141',
+                color: '#843605',
+                align: 'left',
+                padding: {
+                    top: 5,
+                    bottom: 5,
+                },
+                fixedWidth: 0
+            }
+            this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', endConfig).setOrigin(0.5);
+            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← to Menu', endConfig).setOrigin(0.5);
             this.gameOver = true;
         }
 
