@@ -94,20 +94,14 @@ class Play extends Phaser.Scene {
         // GAME OVER flag
         this.gameOver = false;
 
-        // 60-second play clock
-        scoreConfig.fixedWidth = 0;
-        this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
-            this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
-            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← to Menu', scoreConfig).setOrigin(0.5);
-            this.gameOver = true;
-        }, null, this);
+        
 
         //speed up
         this.clock = this.time.delayedCall(30000, () => {
-            this.ship01.moveSpeed *= 1.8;
-            this.ship02.moveSpeed *= 1.8;
-            this.ship03.moveSpeed *= 1.8;
-            this.ship04.moveSpeed *= 1.8;
+            this.ship01.moveSpeed *= 2.2;
+            this.ship02.moveSpeed *= 2.2;
+            this.ship03.moveSpeed *= 2.2;
+            this.ship04.moveSpeed *= 2;
         }, null, this);
     }
 
@@ -125,6 +119,13 @@ class Play extends Phaser.Scene {
         this.starfield1.tilePositionX -= 1.5;  // update tile sprite
         this.starfield2.tilePositionX -= 2;
         this.starfield3.tilePositionX -= 2.5;
+
+        
+        if(this.timeLeft <= 0){
+            this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
+            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← to Menu', scoreConfig).setOrigin(0.5);
+            this.gameOver = true;
+        }
 
         if(!this.gameOver) {
             this.p1Rocket.update();             // update p1
@@ -194,6 +195,7 @@ class Play extends Phaser.Scene {
         });
         // score add and repaint
         this.p1Score += ship.points;
+        this.timeLeft += 2000;
         this.scoreLeft.text = 'Score:' +this.p1Score; 
         if (this.p1Score > localStorage.getItem("highscore")) 
         { 
