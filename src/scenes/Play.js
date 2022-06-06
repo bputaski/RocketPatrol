@@ -7,6 +7,7 @@ class Play extends Phaser.Scene {
         // load images/tile sprites
         this.load.image('rocket', './assets/rocket.png');
         this.load.image('spaceship', './assets/spaceship.png');
+        this.load.image('spaceshipFast', './assets/spaceshipFast.png');
         this.load.image('starfield', './assets/starfield.png');
         this.load.image('starfield2', './assets/starfield2.png');
         this.load.image('starfield3', './assets/starfield3.png');
@@ -32,9 +33,12 @@ class Play extends Phaser.Scene {
         this.p1Rocket = new Rocket(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'rocket').setOrigin(0.5, 0);
 
         // add Spaceships (x3)
-        this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*4, 'spaceship', 0, 30).setOrigin(0, 0);
-        this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2, 'spaceship', 0, 20).setOrigin(0,0);
-        this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*4, 'spaceship', 0, 10).setOrigin(0,0);
+        this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, 160, 'spaceship', 0, 30).setOrigin(0, 0);
+        this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, 210, 'spaceship', 0, 20).setOrigin(0,0);
+        this.ship03 = new Spaceship(this, game.config.width, 260, 'spaceship', 0, 10).setOrigin(0,0);
+
+        // add fast ship
+        this.ship04 = new SpaceshipFast(this, game.config.width, 120, 'spaceshipFast', 0, 60).setOrigin(0,0);
 
         // define keys
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
@@ -99,10 +103,11 @@ class Play extends Phaser.Scene {
         }, null, this);
 
         //speed up
-        this.clock = this.time.delayedCall(10000, () => {
-            this.ship01.moveSpeed *= 1.5;
-            this.ship02.moveSpeed *= 1.5;
-            this.ship03.moveSpeed *= 1.5;
+        this.clock = this.time.delayedCall(30000, () => {
+            this.ship01.moveSpeed *= 1.8;
+            this.ship02.moveSpeed *= 1.8;
+            this.ship03.moveSpeed *= 1.8;
+            this.ship04.moveSpeed *= 1.8;
         }, null, this);
     }
 
@@ -126,6 +131,7 @@ class Play extends Phaser.Scene {
             this.ship01.update();               // update spaceship (x3)
             this.ship02.update();
             this.ship03.update();
+            this.ship04.update();
 
             this.timeLeft -= delta;
             let timeConfig = {
@@ -156,6 +162,10 @@ class Play extends Phaser.Scene {
         if (this.checkCollision(this.p1Rocket, this.ship01)) {
             this.p1Rocket.reset();
             this.shipExplode(this.ship01);
+        }
+        if (this.checkCollision(this.p1Rocket, this.ship04)) {
+            this.p1Rocket.reset();
+            this.shipExplode(this.ship04);
         }
     }  
 
