@@ -13,6 +13,9 @@ class Play extends Phaser.Scene {
         this.load.image('starfield3', './assets/starfield3.png');
         // load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 50, frameHeight: 25, startFrame: 0, endFrame: 8});
+        
+        //load music
+        this.load.audio('rocketMusic', './assets/rocketMusic.wav');
     }
 
     create() {
@@ -103,6 +106,10 @@ class Play extends Phaser.Scene {
             this.ship03.moveSpeed *= 2.2;
             this.ship04.moveSpeed *= 2;
         }, null, this);
+
+        //music
+        this.bgm = this.sound.add('rocketMusic').setLoop(true);
+        this.bgm.play();
     }
 
     update(time, delta) {
@@ -160,6 +167,9 @@ class Play extends Phaser.Scene {
                 fixedWidth: 120
             }
             this.timeDisplay = this.add.text(480, 53, 'Time:' + Math.round(this.timeLeft/1000), timeConfig);
+
+
+            
 
         }
 
