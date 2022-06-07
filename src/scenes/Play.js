@@ -215,7 +215,26 @@ class Play extends Phaser.Scene {
             this.highScoreLeft.text = 'High Score:' + localStorage.getItem('highscore');
         }
         
-        this.sound.play('sfx_explosion');
+
+
+        //random sound effect for explosion
+        this.soundNum = Math.floor(Math.random()*3);
+
+        if (this.soundNum == 0 ){
+            this.sound.play('sfx_explosion1');
+        }
+
+        if (this.soundNum == 1 ){
+            this.sound.play('sfx_explosion2');
+        }
+
+        if (this.soundNum == 2 ){
+            this.sound.play('sfx_explosion3');
+        }
+
+        if (this.soundNum == 3 ){
+            this.sound.play('sfx_explosion4');
+        }
       }
 
 }
