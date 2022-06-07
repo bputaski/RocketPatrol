@@ -207,7 +207,7 @@ class Play extends Phaser.Scene {
         });
         // score add and repaint
         this.p1Score += ship.points;
-        this.timeLeft += 2000;
+        this.timeLeft += 2000;                   //adds extra time on succesful hit
         this.scoreLeft.text = 'Score:' +this.p1Score; 
         if (this.p1Score > localStorage.getItem("highscore")) 
         { 
