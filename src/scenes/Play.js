@@ -12,7 +12,7 @@ class Play extends Phaser.Scene {
         this.load.image('starfield2', './assets/starfield2.png');
         this.load.image('starfield3', './assets/starfield3.png');
         // load spritesheet
-        this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
+        this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 50, frameHeight: 25, startFrame: 0, endFrame: 8});
     }
 
     create() {
